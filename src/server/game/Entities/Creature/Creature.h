@@ -82,10 +82,10 @@ struct TC_GAME_API CreatureTemplate
     uint32  Entry;
     uint32  DifficultyEntry[MAX_DIFFICULTY - 1];
     uint32  KillCredit[MAX_KILL_CREDIT];
-    uint32  Modelid1;
-    uint32  Modelid2;
-    uint32  Modelid3;
-    uint32  Modelid4;
+    int32  Modelid1;
+    int32  Modelid2;
+    int32  Modelid3;
+    int32  Modelid4;
     std::string  Name;
     std::string  Title;
     std::string  IconName;
@@ -139,8 +139,8 @@ struct TC_GAME_API CreatureTemplate
     uint32  MechanicImmuneMask;
     uint32  flags_extra;
     uint32  ScriptID;
-    uint32  GetRandomValidModelId() const;
-    uint32  GetFirstValidModelId() const;
+    int32  GetRandomValidModelId() const;
+    int32  GetFirstValidModelId() const;
     uint32  GetFirstInvisibleModel() const;
     uint32  GetFirstVisibleModel() const;
 
@@ -255,7 +255,7 @@ struct CreatureData
     CreatureData() : id(0), mapid(0), phaseMask(0), displayid(0), equipmentId(0),
                      posX(0.0f), posY(0.0f), posZ(0.0f), orientation(0.0f), spawntimesecs(0),
                      spawndist(0.0f), currentwaypoint(0), curhealth(0), curmana(0), movementType(0),
-                     spawnMask(0), npcflag(0), unit_flags(0), dynamicflags(0), dbData(true) { }
+                     spawnMask(0), npcflag(0), unit_flags(0), dynamicflags(0), dbData(true), size(0.0f) { }
     uint32 id;                                              // entry in creature_template
     uint16 mapid;
     uint32 phaseMask;
@@ -276,6 +276,7 @@ struct CreatureData
     uint32 unit_flags;                                      // enum UnitFlags mask values
     uint32 dynamicflags;
     bool dbData;
+    float size;
 };
 
 struct CreatureModelInfo
@@ -436,6 +437,9 @@ class TC_GAME_API Creature : public Unit, public GridObject<Creature>, public Ma
 
         void SetObjectScale(float scale) override;
         void SetDisplayId(uint32 modelId) override;
+
+        void SetOutfit(int32 outfit) { outfitId = outfit; };
+        int32 GetOutfit() const { return outfitId; };
 
         void DisappearAndDie();
 
@@ -777,6 +781,7 @@ class TC_GAME_API Creature : public Unit, public GridObject<Creature>, public Ma
         ObjectGuid m_suppressedTarget; // Stores the creature's "real" target while casting
         float m_suppressedOrientation; // Stores the creature's "real" orientation while casting
 
+        int32 outfitId;
         CreatureTextRepeatGroup m_textRepeat;
 };
 
